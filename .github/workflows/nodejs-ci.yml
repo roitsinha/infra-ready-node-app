@@ -25,11 +25,10 @@
   env:
     PGPASSWORD: password
 
-- name: Show current directory and files
-  run: |
-    pwd
-    ls -la
+- name: Install dependencies
+  run: npm install
+  working-directory: ./backend
 
 - name: Run tests
-  run: npm run test
+  run: npm test
   working-directory: ./backend
