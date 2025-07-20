@@ -50,7 +50,7 @@ jobs:
 
       - name: Run DB initialization script
         run: |
-          PGPASSWORD=password psql -h localhost -U postgres -d testdb -f ./backend/db/init.sql -a -v
+          PGPASSWORD=password psql -h localhost -U postgres -d testdb -f ./backend/db/init.sql -a
         env:
           PGPASSWORD: password
 
