@@ -10,6 +10,11 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use('/api', userRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+if (require.main === module) {
+  // Only start server if not in test environment..
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
