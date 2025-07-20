@@ -1,34 +1,59 @@
-- uses: actions/checkout@v2
+name: Node.js CI with Postgres
 
-- name: Setup Node.js
-  uses: actions/setup-node@v2
-  with:
-    node-version: "18"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
-- name: Install dependencies
-  run: npm install
-  working-directory: ./backend
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: testdb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
-- name: Wait for Postgres to be ready
-  run: |
-    until pg_isready -h localhost -p 5432 -U postgres; do
-      echo "Waiting for Postgres to be ready..."
-      sleep 2
-    done
+    steps:
+      - uses: actions/checkout@v2
 
-- name: List DB init files (for debug)
-  run: ls -l ./backend/db/
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
 
-- name: Run DB initialization script
-  run: |
-    PGPASSWORD=password psql -h localhost -U postgres -d testdb -f ./backend/db/init.sql -a -v
-  env:
-    PGPASSWORD: password
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./backend
 
-- name: Install dependencies
-  run: npm install
-  working-directory: ./backend
+      - name: Wait for Postgres to be ready
+        run: |
+          until pg_isready -h localhost -p 5432 -U postgres; do
+            echo "Waiting for Postgres to be ready..."
+            sleep 2
+          done
 
-- name: Run tests
-  run: npm test
-  working-directory: ./backend
+      - name: List DB init files (for debug)
+        run: ls -l ./backend/db/
+
+      - name: Run DB initialization script
+        run: |
+          PGPASSWORD=password psql -h localhost -U postgres -d testdb -f ./backend/db/init.sql -a -v
+        env:
+          PGPASSWORD: password
+
+      - name: Run tests
+        run: npm test
+        working-directory: ./backend
