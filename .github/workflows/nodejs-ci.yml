@@ -1,55 +1,35 @@
-name: Node.js CI
+- uses: actions/checkout@v2
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+- name: Setup Node.js
+  uses: actions/setup-node@v2
+  with:
+    node-version: "18"
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+- name: Install dependencies
+  run: npm install
+  working-directory: ./backend
 
-    services:
-      postgres:
-        image: postgres:14
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: your_postgres_password_here
-          POSTGRES_DB: infra_ready_db
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+- name: Wait for Postgres to be ready
+  run: |
+    until pg_isready -h localhost -p 5432 -U postgres; do
+      echo "Waiting for Postgres to be ready..."
+      sleep 2
+    done
 
-    env:
-      PGUSER: postgres
-      PGPASSWORD: your_postgres_password_here
-      PGDATABASE: infra_ready_db
-      PGHOST: localhost
-      PGPORT: 5432
+- name: List DB init files (for debug)
+  run: ls -l ./backend/db/
 
-    steps:
-      - uses: actions/checkout@v3
+- name: Run DB initialization script
+  run: |
+    PGPASSWORD=password psql -h localhost -U postgres -d testdb -f ./backend/db/init.sql -a -v
+  env:
+    PGPASSWORD: password
 
-      - name: Use Node.js 18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+- name: Show current directory and files
+  run: |
+    pwd
+    ls -la
 
-      - name: Install dependencies
-        run: npm install
-        working-directory: ./backend
-
-      - name: Wait for Postgres to be ready
-        run: |
-          until pg_isready -h localhost -p 5432; do
-            sleep 1
-          done
-
-      - name: Run tests
-        run: npm test
-        working-directory: ./backend
+- name: Run tests
+  run: npm test
+  working-directory: ./backend
