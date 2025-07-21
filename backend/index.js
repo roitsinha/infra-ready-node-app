@@ -8,16 +8,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(express.json());
 
-// Serve static frontend from /public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// API routes
 app.use('/api/users', userRoutes);
 
-// Fallback to index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
