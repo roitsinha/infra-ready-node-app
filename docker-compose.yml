@@ -5,13 +5,13 @@ services:
     image: postgres:14
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: your_postgres_password_here
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: infra_ready_db
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./backend/utils:/docker-entrypoint-initdb.d:ro
 
   app:
     build: .
@@ -21,7 +21,7 @@ services:
       - "3000:3000"
     environment:
       PGUSER: postgres
-      PGPASSWORD: your_postgres_password_here
+      PGPASSWORD: password
       PGDATABASE: infra_ready_db
       PGHOST: db
       PGPORT: 5432

@@ -46,11 +46,11 @@ jobs:
           done
 
       - name: List DB init files (for debug)
-        run: ls -l ./backend/db/
+        run: ls -l ./backend/utils/
 
       - name: Run DB initialization script
         run: |
-          PGPASSWORD=password psql -h localhost -U postgres -d testdb -f ./backend/db/init.sql -a
+          PGPASSWORD=password psql -h localhost -U postgres -d testdb -f ./backend/utils/init.sql -a
         env:
           PGPASSWORD: password
 
