@@ -17,11 +17,20 @@ services:
     build: ./backend
     depends_on:
       - db
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     env_file:
       - ./backend/.env
     command: node index.js
+
+  nginx:
+    build: ./backend/nginx
+    depends_on:
+      - app
+    ports:
+      - "443:443" # Expose HTTPS on localhost:443
+    networks:
+      - default
 
 volumes:
   pgdata:
