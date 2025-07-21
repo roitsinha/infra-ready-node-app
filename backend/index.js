@@ -1,22 +1,20 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const path = require('path');
-const userRoutes = require('./routes/userRoutes');
+import express from 'express';
+import dotenv from 'dotenv';
+import userRoutes from './routes/userRoutes.js';
 
-dotenv.config();
+dotenv.config(); 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/api/users', userRoutes);
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.send('Welcome to Infra Ready Node App!');
 });
+
+app.use('/api/users', userRoutes);
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
@@ -24,4 +22,4 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-module.exports = app;
+export default app;
