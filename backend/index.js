@@ -1,17 +1,12 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import userRoutes from './routes/userRoutes.js';
+const express = require('express');
+const dotenv = require('dotenv');
+const path = require('path');
+const userRoutes = require('./routes/userRoutes');
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-// Handle __dirname in ES Modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Middleware
 app.use(express.json());
@@ -33,4 +28,4 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-export default app;
+module.exports = app;
