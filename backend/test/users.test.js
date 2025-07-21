@@ -1,6 +1,6 @@
-const request = require('supertest');
-const app = require('../index');       
-const pool = require('../models/db'); 
+import request from 'supertest';
+import app from '../index.js';         
+import pool from '../models/db.js';    
 
 describe('GET /api/users', () => {
   it('should return users including Alice and Bob', async () => {
