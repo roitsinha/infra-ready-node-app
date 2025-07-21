@@ -9,25 +9,24 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Support __dirname in ES modules
+// Handle __dirname in ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middleware
 app.use(express.json());
 
-// Serve static files (like index.html)
+// Serve static frontend from /public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// API Routes
+// API routes
 app.use('/api/users', userRoutes);
 
-// Fallback for root route to serve index.html
+// Fallback to index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Start server
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`✅ Server running on port ${PORT}`);
