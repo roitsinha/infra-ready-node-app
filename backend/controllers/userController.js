@@ -1,6 +1,6 @@
-const pool = require('../models/db');
+import pool from '../models/db.js';
 
-const getUsers = async (req, res) => {
+export const getUsers = async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM users ORDER BY id ASC');
     res.status(200).json(result.rows);
@@ -10,8 +10,7 @@ const getUsers = async (req, res) => {
   }
 };
 
-
-const createUser = async (req, res) => {
+export const createUser = async (req, res) => {
   const { name, email } = req.body;
 
   if (!name || !email) {
@@ -29,5 +28,3 @@ const createUser = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
-
-module.exports = { getUsers, createUser };
