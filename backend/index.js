@@ -8,6 +8,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+
+app.get('/', (req, res) => {
+  res.send('Welcome to Infra Ready Node App!');
+});
+
 app.use('/api/users', userRoutes);
 
 if (process.env.NODE_ENV !== 'test') {
@@ -16,4 +22,4 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-export default app; 
+export default app;
