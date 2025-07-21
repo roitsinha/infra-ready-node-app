@@ -12,11 +12,25 @@ You’ll find the main backend code inside a folder called `backend`. It’s org
 
 ## How to Get Started
 
-1.  First, clone the project to your computer.
-2.  Move into the backend folder.
-3.  Copy the example environment file to a real one — this is where you’ll set things like your database address and ports.
-4.  Install the dependencies.
-5.  Start the app.
+1. First, clone the project to your computer.
+2. Move into the `backend` folder.
+3. Copy the example environment file to a real one — this is where you’ll set things like your database address and ports:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+4. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+5. Start the app:
+
+   ```bash
+   npm start
+   ```
 
 ---
 
@@ -28,6 +42,15 @@ If you want to run the app on your computer:
 - Run `cp .env.example .env` to create your environment file.
 - Run `npm install` to get all the required packages.
 - Then run `npm start` to launch the app.
+- Make sure PostgreSQL is running locally, and your `.env` file has the correct connection strings.
+- Create and initialize the databases before running the app or tests:
+
+  ```bash
+  createdb infra_ready_db
+  createdb infra_ready_db_test
+  psql -d infra_ready_db -f ./backend/utils/init.sql
+  psql -d infra_ready_db_test -f ./backend/utils/init.sql
+  ```
 
 ---
 
@@ -37,10 +60,9 @@ If you have Docker and Docker Compose installed, you can run everything in conta
 
 ```
 docker-compose up --build
-
 ```
 
-This will start both the backend app and the PostgreSQL database.
+This will start both the backend app and the PostgreSQL database, automatically initializing the database schema.
 
 ---
 
@@ -59,6 +81,22 @@ This will start both the backend app and the PostgreSQL database.
 
 You’ll need to set some environment variables in your `.env` file. The example file `.env.example` shows what’s needed, such as the database connection string and the port number.
 
+Example variables:
+
+```env
+PORT=3000
+DATABASE_URL=postgresql://postgres:password@localhost:5432/infra_ready_db
+TEST_DATABASE_URL=postgresql://postgres:password@localhost:5432/infra_ready_db_test
+PGUSER=postgres
+PGPASSWORD=password
+PGHOST=localhost
+PGPORT=5432
+PGDATABASE=infra_ready_db
+```
+
+- `DATABASE_URL` is used for development.
+- `TEST_DATABASE_URL` is used when running tests (`NODE_ENV=test`).
+
 ---
 
 ## Running Tests
@@ -67,8 +105,9 @@ You can run tests using Jest. From the backend folder, run:
 
 ```
 npm test
-
 ```
+
+Tests will use the test database and expect it to be created and initialized.
 
 ---
 

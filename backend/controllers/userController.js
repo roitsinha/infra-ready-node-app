@@ -5,7 +5,7 @@ export const getUsers = async (req, res) => {
     const result = await pool.query('SELECT * FROM users ORDER BY id ASC');
     res.status(200).json(result.rows);
   } catch (err) {
-    console.error('Error fetching users:', err.message);
+    console.error('❌ Error fetching users:', err.message);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -24,7 +24,13 @@ export const createUser = async (req, res) => {
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error('Error inserting user:', err.message);
+    if (err.code === '23505') {
+  
+      console.error('⚠️ Duplicate email:', email);
+      return res.status(409).json({ error: 'Email already exists.' });
+    }
+
+    console.error('❌ Error inserting user:', err.message);
     res.status(500).json({ error: 'Server error' });
   }
 };
