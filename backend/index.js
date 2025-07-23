@@ -9,22 +9,35 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Security headers
 app.use(helmet());
 
-// Rate limiting middleware: limit each IP to 100 requests per 15 minutes
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 app.use(limiter);
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Welcome to Infra Ready Node App!');
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Infra Ready Node App</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body>
+        <h1>Welcome to Infra Ready Node App!</h1>
+        <button onclick="window.location.href='https://infra-ready-node-app.onrender.com/api/users'">
+          Go to Users API
+        </button>
+      </body>
+    </html>
+  `);
 });
 
 app.use('/api/users', userRoutes);
