@@ -1,30 +1,30 @@
 # Infra-Ready Node App
 
-This project is a backend built with Node.js and PostgreSQL. It’s designed to be easy to run locally or in containers with Docker, and it's set up with continuous integration workflows to help keep the code solid and deployable.
+This project is a backend built with Node.js and PostgreSQL. It’s designed to be simple to set up and run locally or inside Docker containers. Plus, it’s structured for continuous integration and smooth deployment, so you can focus on building features without headaches.
 
 ---
 
 ## What’s Inside?
 
-You’ll find the main backend code inside a folder called `backend`. It’s organized into folders for configuration, controllers that handle routes, models for database stuff, routes, and tests for checking the code. Outside that, there are files for Docker and infrastructure as code.
+Inside the `backend` folder, you’ll find everything organized neatly — configuration files, route handlers (controllers), database models, API routes, and tests. The project uses ES modules (`import` / `export`) throughout, keeping it modern and clean.
 
-The backend uses ES modules (`import` / `export`) throughout.
+There’s also infrastructure code for Docker and deployment.
 
 ---
 
-## How to Get Started
+## Getting Started
 
-1. Clone the project to your computer.
+1. Clone this repo to your computer.
 
-2. Move into the `backend` folder.
+2. Navigate into the `backend` folder.
 
-3. Copy the example environment file to a real one — this is where you’ll set things like your database address and ports:
+3. Copy the example environment file to `.env` and fill in your settings:
 
    ```bash
    cp .env.example .env
    ```
 
-4. Install dependencies:
+4. Install all dependencies:
 
    ```bash
    npm install
@@ -40,13 +40,13 @@ The backend uses ES modules (`import` / `export`) throughout.
 
 ## Running Locally
 
-To run the app locally:
+To run the app on your machine:
 
-- Ensure PostgreSQL is running and accessible.
+- Make sure PostgreSQL is installed and running.
 
-- Make sure your `.env` file has the correct database connection strings.
+- Update your `.env` file with the correct database connection info.
 
-- Create and initialize the databases before running the app or tests:
+- Create and initialize your databases:
 
   ```bash
   createdb infra_ready_db
@@ -55,45 +55,57 @@ To run the app locally:
   psql -d infra_ready_db_test -f ./backend/utils/init.sql
   ```
 
-- Run the backend app inside the `backend` folder:
+- Run the backend:
 
   ```bash
   npm start
   ```
 
-- The backend serves a simple frontend from the `public` folder with an `index.html` that lets you view and create users via the API.
+- Your backend will serve a simple frontend at `http://localhost:3000` where you can explore the API.
 
 ---
 
-## Running with Docker
+## Running with Docker & Deployment on Render
 
-If you have Docker and Docker Compose installed, you can run everything in containers with:
+Want to run everything inside Docker containers? No problem.
 
-```bash
-docker-compose up --build
-```
+- Build and start all services (backend, database, and nginx) with:
 
-This will start both the backend app and PostgreSQL database, automatically initializing the database schema.
+  ```bash
+  docker-compose up --build
+  ```
+
+- This spins up your full stack locally with HTTPS enabled via Nginx.
+
+- For production, this project is ready to be deployed on **Render** (or similar platforms) using Docker images.
+
+- Just connect your Git repo to Render, set up your environment variables in Render’s dashboard, and it will automatically build and deploy your app with HTTPS and database integration.
 
 ---
 
-## Project Structure Explained
+## Project Structure
 
-- `backend/config` — configuration files like DB settings.
-- `backend/controllers` — route handlers and business logic.
-- `backend/models` — database schemas and queries.
-- `backend/routes` — API endpoint definitions.
-- `backend/tests` — Jest test suites.
-- `backend/public` — static frontend files (`index.html` and client JS).
-- Root folder contains Docker and Terraform configs for infrastructure and deployment.
+- `backend/config` — config files like database connection settings
+
+- `backend/controllers` — functions that handle API logic
+
+- `backend/models` — database queries and schemas
+
+- `backend/routes` — API route definitions
+
+- `backend/tests` — Jest test suites
+
+- `backend/public` — static frontend files (HTML, JS)
+
+- Root folder — Docker and Terraform files for infrastructure and deployment
 
 ---
 
 ## Environment Variables
 
-Set environment variables in your `.env` file. The `.env.example` provides a template.
+Use the `.env` file to set your environment-specific settings. See `.env.example` as a template.
 
-Example:
+Example variables include:
 
 ```env
 PORT=3000
@@ -106,9 +118,6 @@ PGPORT=5432
 PGDATABASE=infra_ready_db
 ```
 
-- `DATABASE_URL` is used for development.
-- `TEST_DATABASE_URL` is used when running tests (`NODE_ENV=test`).
-
 ---
 
 ## Running Tests
@@ -119,24 +128,24 @@ Tests use Jest and run against the test database.
 npm test
 ```
 
-Make sure the test database exists and is initialized before running tests.
-
-The project uses ES modules, so Jest is configured with `babel-jest` to support that.
+Make sure your test database exists and is initialized before running tests.
 
 ---
 
-## Notes on Module System and Deployment
+## Notes on Tech & Deployment
 
-- The backend uses ES module syntax (`import` / `export`).
-- `package.json` includes `"type": "module"`.
-- Static frontend is served from the `/public` folder.
-- Deployment (e.g., on Railway) requires the project to remain ES module-based for compatibility.
-- Jest is configured accordingly for testing ES modules.
+- Uses ES modules (`import`/`export` syntax)
+
+- Includes a simple static frontend served from the `/public` folder
+
+- Ready for deployment on modern platforms like Render with Docker support
+
+- Security best practices included (Helmet, rate limiting, HTTPS via Nginx)
 
 ---
 
-## That’s it!
+## Summary
 
-This setup helps you work on a solid, testable backend that can be easily deployed using Docker and infrastructure-as-code tools. To contribute or improve, follow the existing style, write tests, and keep your environment variables secure.
+This project sets you up with a clean, tested, and production-ready Node.js backend powered by PostgreSQL, with Docker and infrastructure support for quick deployment. Whether you’re developing locally or deploying on Render, it’s made to be smooth and professional.
 
 ---
