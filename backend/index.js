@@ -19,7 +19,7 @@ const limiter = rateLimit({
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
-  trustProxy: true,
+  trustProxy: 1,
 });
 app.use(limiter);
 
