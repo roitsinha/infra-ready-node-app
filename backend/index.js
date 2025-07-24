@@ -9,8 +9,8 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Tell Express to trust reverse proxy .
-app.set('trust proxy', true);
+// Tell Express to trust the first reverse proxy
+app.set('trust proxy', 1);
 
 app.use(helmet());
 
