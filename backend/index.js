@@ -9,6 +9,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Tell Express to trust reverse proxy .
+app.set('trust proxy', true);
+
 app.use(helmet());
 
 const limiter = rateLimit({
